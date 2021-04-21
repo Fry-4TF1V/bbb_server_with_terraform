@@ -185,15 +185,16 @@ resource null_resource install_bbb {
       "cd /tmp/",
       "wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -w -v xenial-22 -s ${var.bbb_server_fqdn}.${var.dns_domain} -e ${var.bbb_letsencrypt_email} -g",
       "sudo docker exec greenlight-v2 bundle exec rake admin:create",
+      # An automatic user as been created on https://${var.bbb_server_fqdn}.${var.dns_domain}/b/ with the following credentials :
+      # Email: admin@example.com
+      # Password: administrator
+      # REMEMBER TO change this default password ASAP
       "sudo bbb-conf --setsecret ${random_password.bbb_server_secret.result}",
       "sudo bbb-conf --restart",
       "sudo sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=${random_password.bbb_server_secret.result}/g' ~/greenlight/.env",
       "sudo docker-compose -f ~/greenlight/docker-compose.yml up -d",
-      "sudo bash <(curl -Ss https://my-netdata.io/kickstart.sh)",
-      # An automatic user as been created on https://${var.bbb_server_fqdn}.${var.dns_domain}/b/ with the following credentials :
-      # Email: admin@example.com
-      # Password: administrator
-      # Remember to change this default password ASAP
+      "sudo ufw allow 19999/tcp",
+      "bash <(curl -Ss https://my-netdata.io/kickstart.sh) --dont-wait",
     ]
   }
 }
