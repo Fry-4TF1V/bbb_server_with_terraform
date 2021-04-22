@@ -157,7 +157,7 @@ resource ovh_domain_zone_record bbb_server_record_AAAA {
 resource openstack_compute_instance_v2 bbb_server {
   count            = 1
   region           = var.ovh_region
-  name             = "bbb_server"
+  name             = "bbb"
   image_name       = var.bbb_server_image
   flavor_name      = var.bbb_server_flavor
   key_pair         = var.keypair_name
@@ -181,11 +181,10 @@ resource null_resource install_bbb {
     }
 
     inline = [
-      # "sudo su - root",
       "cd /tmp/",
       "wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -w -v xenial-22 -s ${var.bbb_server_fqdn}.${var.dns_domain} -e ${var.bbb_letsencrypt_email} -g",
       "sudo docker exec greenlight-v2 bundle exec rake admin:create",
-      # An automatic user as been created on https://${var.bbb_server_fqdn}.${var.dns_domain}/b/ with the following credentials :
+      # An automatic user as been created on https://yoururl/b/ with the following credentials :
       # Email: admin@example.com
       # Password: administrator
       # REMEMBER TO change this default password ASAP
@@ -193,9 +192,10 @@ resource null_resource install_bbb {
       "sudo bbb-conf --restart",
       "sudo sed -i 's/BIGBLUEBUTTON_SECRET=.*/BIGBLUEBUTTON_SECRET=${random_password.bbb_server_secret.result}/g' ~/greenlight/.env",
       "sudo docker-compose -f ~/greenlight/docker-compose.yml up -d",
+      # Install Netdata for monitoring purpose, available on port http://yoururl:19999
       "sudo ufw allow 19999/tcp",
-      "bash <(curl -Ss https://my-netdata.io/kickstart.sh) --dont-wait",
+      "wget -qO- https://my-netdata.io/kickstart.sh | sudo bash -s -- --dont-wait",
+      "bbb-conf -secret",
     ]
   }
 }
-
