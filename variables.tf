@@ -54,6 +54,6 @@ variable keypair_name {
 
 variable public_key {
   type        = string
-  description = "Public Key stored in Openstack"
+  description = "Public Key used by Openstack"
   default     = "~/.ssh/id_rsa.pub"
 }
