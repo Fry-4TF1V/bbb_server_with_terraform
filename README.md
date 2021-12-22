@@ -1,7 +1,13 @@
 # bbb_server_with_terraform
 Deploy a BigBlueButton server on OVHcloud Public Cloud Instances with fully automated default configuration through Terraform
 
-Use the following command line to launch deployment :
+## Requirements
+Setup your environment with something like following
+```
+eval $(ssh-agent) && ssh-add ~/.ssh/id_rsa && source openrc.sh
+```
+
+## Use the following command line to launch deployment :
 
 ```bash
 $ terraform apply \
