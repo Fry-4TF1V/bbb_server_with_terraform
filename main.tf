@@ -183,7 +183,10 @@ resource null_resource install_bbb {
     inline = [
       "sudo apt-get update -y && sudo apt-get upgrade -y"
       "cd /tmp/",
-      "wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -w -v xenial-22 -s ${var.bbb_server_fqdn}.${var.dns_domain} -e ${var.bbb_letsencrypt_email} -g",
+      # For Ubuntu 16.04
+      #"wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -w -v xenial-22 -s ${var.bbb_server_fqdn}.${var.dns_domain} -e ${var.bbb_letsencrypt_email} -g",
+      # For Ubuntu 18.04
+      "wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -w -v bionic-230 -s ${var.bbb_server_fqdn}.${var.dns_domain} -e ${var.bbb_letsencrypt_email} -g",
       "sudo docker exec greenlight-v2 bundle exec rake admin:create",
       # An automatic user as been created on https://yoururl/b/ with the following credentials :
       # Email: admin@example.com
