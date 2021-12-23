@@ -165,6 +165,7 @@ resource openstack_compute_instance_v2 bbb_server {
     port           = openstack_networking_port_v2.bbb_server_port.id
     access_network = true
   }
+  user_data        = "#cloud-config\npackage_update: true\npackage_upgrade: true"
 }
 
 # Run the BBB install script inside the instance
@@ -181,7 +182,7 @@ resource null_resource install_bbb {
     }
 
     inline = [
-      "sudo apt-get update -y && sudo apt-get upgrade -y",
+      #"sudo apt-get update -y && sudo apt-get upgrade -y",
       "cd /tmp/",
       # For Ubuntu 16.04
       #"wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | sudo bash -s -- -w -v xenial-22 -s ${var.bbb_server_fqdn}.${var.dns_domain} -e ${var.bbb_letsencrypt_email} -g",
