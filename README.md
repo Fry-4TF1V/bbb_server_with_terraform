@@ -17,7 +17,7 @@ $ terraform apply \
   -var="ovh_consumer_key=zzz" \                     # OVHcloud Consumer Key
   -var="dns_domain=your.domain.tld" \               # OVHcloud DNS domain already available on your account
   -var="bbb_server_fqdn=bbb-server.subdomain" \     # BBB Server subdomain (without OVHcloud DNS domain)
-  -var="bbb_server_image=Ubuntu 18.04" \            # Linux distribution used for deployement, default is Ubuntu 16.04 (currently only supported)
+  -var="bbb_server_image=Ubuntu 18.04" \            # Linux distribution used for deployement, default is Ubuntu 18.04 (currently only supported)
   -var="bbb_server_flavor=b2-7" \                   # Instance Flavor (CPU,RAM,Disk config), default is b2-7
   -var="bbb_letsencrypt_email=email@domain.tld" \   # Email address for Let's Encrypt to generate a valid SSL certificate for the host
   -var="keypair_name=keypair-with-terraform" \      # Keypair name stored in Openstack
