@@ -1,7 +1,7 @@
 variable ovh_region {
   type        = string
   description = "OVHcloud Public Cloud region used"
-  default     = "GRA7"
+  default     = "GRA11"
 }
 
 variable ovh_application_key {
@@ -32,7 +32,7 @@ variable bbb_server_fqdn {
 variable bbb_server_image {
   type        = string
   description = "BBB Server Linux distribution"
-  default     = "Ubuntu 16.04"
+  default     = "Ubuntu 18.04"
 }
 
 variable bbb_server_flavor {

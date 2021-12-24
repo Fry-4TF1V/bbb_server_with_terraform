@@ -153,6 +153,19 @@ resource ovh_domain_zone_record bbb_server_record_AAAA {
   target = local.bbb_ipv6
 }
 
+data template_file user_data {
+  template = <<EOF
+#cloud-config
+package_update: true
+package_upgrade: true
+# power_state:
+#   mode: reboot
+#   message: Rebooting...
+#   timeout: 30
+#   condition: True
+EOF
+}
+
 # Create a BBB server on PCI
 resource openstack_compute_instance_v2 bbb_server {
   count            = 1
@@ -165,13 +178,26 @@ resource openstack_compute_instance_v2 bbb_server {
     port           = openstack_networking_port_v2.bbb_server_port.id
     access_network = true
   }
-  user_data        = "#cloud-config\npackage_update: true\npackage_upgrade: true"
+  #user_data        = "#cloud-config\\npackage_update: true\\npackage_upgrade: true"
+  #user_data        = "${ data.template_file.user_data.rendered }"
+  user_data        = data.template_file.user_data.rendered
 }
+
+# resource null_resource delay {
+#   provisioner "local-exec" {
+#     command = "sleep 10"
+#   }
+#   triggers = {
+#     server_id = openstack_compute_instance_v2.bbb_server[0].id
+#   }
+# }
 
 # Run the BBB install script inside the instance
 resource null_resource install_bbb {
+  # depends_on = [null_resource.delay]
+
   triggers = {
-     server_id =  openstack_compute_instance_v2.bbb_server[0].id
+    server_id =  openstack_compute_instance_v2.bbb_server[0].id
   }
 
   provisioner "remote-exec" {
